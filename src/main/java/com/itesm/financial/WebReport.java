@@ -1,19 +1,24 @@
 package com.itesm.financial;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
+/* INHERITANCE */
 public class WebReport extends Report{
 
+    public WebReport(FinancialReportData financialReportData) {
+        super(financialReportData);
+    }
+
     @Override
-    private String createTitle(String title){
+    protected String getFileName(){
+        return "financial-report.html";
+    }
+
+    @Override
+    protected String createTitle(String title){
         return "<h1>" + title + "</h1>";
     }
 
     @Override
-    private String createTableHeader() {
+    protected String createTableHeader() {
         return "<table>" +
                 "<tr>" +
                     "<th> TaxiID </th>" +
@@ -26,12 +31,12 @@ public class WebReport extends Report{
     }
 
     @Override
-    private String closeTableFooter() {
+    protected String createTableFooter() {
         return "</table>";
     }
 
     @Override
-    private String addRide(Ride ride) {
+    protected String addRide(Ride ride) {
         return "<tr>" +
                 "<td>" + ride.getTaxiId() + "</td>" +
                 "<td>" + ride.getPickUpTime() + "</td>" +

@@ -1,13 +1,20 @@
+package com.itesm.financial;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
-abstract public class Report {
+abstract class Report {
     private FinancialReportData financialReportData;
-    
-    public Report(financialReportData){
+
+    /* DEPENDENCY INJECTION */
+    public Report(FinancialReportData financialReportData){
         this.financialReportData = financialReportData;
     }
 
-    private static createFile(String filename, String content) throws IOException{
+    public void createFile(String content) throws IOException {
+        String filename = this.getFileName();
         FileWriter fileWriter = new FileWriter(filename);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         printWriter.print(content);
@@ -15,20 +22,23 @@ abstract public class Report {
     }
 
     public String createContent() {
+
+        /* BUILDER DESIGN PATTERN */
         StringBuilder builder = new StringBuilder();
-        builder.append(createTitle("Taxi Report"));
-        builder.append(createTableHeader());
-        rides = this.financialReportData.getRides();
+        builder.append(this.createTitle("Taxi Report"));
+        builder.append(this.createTableHeader());
+        List<Ride> rides = this.financialReportData.getRides();
         rides.forEach( ride -> {
-            builder.append(addRide(ride));
+            builder.append(this.addRide(ride));
         });
-        builder.append(createTableFooter());
+        builder.append(this.createTableFooter());
 
         return builder.toString();
     }
 
-    abstract private createTitle(String title);
-    abstract private createTableHeader();
-    abstract private createTableFooter();
-    abstract private addRide(Ride ride);
+    abstract protected String getFileName();
+    abstract protected String createTitle(String title);
+    abstract protected String createTableHeader();
+    abstract protected String createTableFooter();
+    abstract protected String addRide(Ride ride);
 }

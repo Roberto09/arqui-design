@@ -1,17 +1,23 @@
+package com.itesm.financial;
 
-class FinancialReporDatatBuilder {
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public class FinancialReportDataBuilder {
     private InputStream inputStream;
     private InputStreamReader streamReader;
     
-    public FinancialReportBuilder withInputStream(InputStream inputStream){
+    public FinancialReportDataBuilder withInputStream(InputStream inputStream){
         this.inputStream = inputStream;
+        return this;
     }
 
-    public FinancialReportBuilder withStreamReader(InputStreamReader streamReader){
+    public FinancialReportDataBuilder withStreamReader(InputStreamReader streamReader){
         this.streamReader = streamReader;
+        return this;
     }
 
-    public FinancialReportData build(){
+    public FinancialReportData build() throws Exception {
         return new FinancialReportData(inputStream, streamReader);
     }
 }

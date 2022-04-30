@@ -1,4 +1,4 @@
-
+package com.itesm.financial;
 
 public class ReportFactory {
     public static Report createReport(String type, FinancialReportData data){

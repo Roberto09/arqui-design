@@ -9,21 +9,21 @@ import java.util.List;
 
 public class Client {
     private static final String CSV_FILENAME = "taxi-data.csv";
-
+    private static final String TYPE = "print"; // "web";
     public static void main(String[] args) throws Exception {
         System.out.println("Financial Report Generation");
         InputStream inputStream = Client.class.getClassLoader().getResourceAsStream(CSV_FILENAME);
         InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-        FinancialReportData data = new FinancialReportDataBuilder().withInputStream(inputStream).withStreamReader(streamReader);        
 
-        Report webReport = ReportFactory.createReport("web", data);
-        String htmlReport = webReport.createContent(result);
-        Report.createFile("financial-report.html", htmlReport);
-        // System.out.println(htmlReport);
-        
-        Report printReport = ReportFactory.createReport("print", data);
-        String textReport = printReport.createContent(result);
-        Report.createFile("financial-report.txt", textReport);
-        System.out.println(textReport)
+        /* BUILDER DESIGN PATTERN */
+        FinancialReportData data = (new FinancialReportDataBuilder()).withInputStream(inputStream).withStreamReader(streamReader).build();
+
+        /* SIMPLE FACTORY DESIGN PATTERN */
+        /* POLYMORPHYSM */
+
+        Report report = ReportFactory.createReport(TYPE, data);
+        String formattedReport = report.createContent();
+        report.createFile(formattedReport);
+//         System.out.println(htmlReport);
     }
 }
