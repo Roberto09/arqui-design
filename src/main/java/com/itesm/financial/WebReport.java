@@ -5,32 +5,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class WebReport {
+public class WebReport extends Report{
 
-    public String createContent(List<Ride> rides) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(createHeaders("Taxi Report"));
-        builder.append(createTableHeaders());
-        rides.forEach( ride -> {
-            builder.append(addRide(ride));
-        });
-        builder.append(closeTableHeaders());
-
-        return builder.toString();
-    }
-
-    public void createFile(String content) throws IOException {
-        FileWriter fileWriter = new FileWriter("financial-report.html");
-        PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.print(content);
-        printWriter.close();
-    }
-
-    private String createHeaders(String title){
+    @Override
+    private String createTitle(String title){
         return "<h1>" + title + "</h1>";
     }
 
-    private String createTableHeaders() {
+    @Override
+    private String createTableHeader() {
         return "<table>" +
                 "<tr>" +
                     "<th> TaxiID </th>" +
@@ -42,10 +25,12 @@ public class WebReport {
                 "</tr>";
     }
 
-    private String closeTableHeaders() {
+    @Override
+    private String closeTableFooter() {
         return "</table>";
     }
 
+    @Override
     private String addRide(Ride ride) {
         return "<tr>" +
                 "<td>" + ride.getTaxiId() + "</td>" +

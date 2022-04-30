@@ -12,24 +12,18 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Financial Report Generation");
-
-        List<Ride> result = new ArrayList<>();
-
         InputStream inputStream = Client.class.getClassLoader().getResourceAsStream(CSV_FILENAME);
         InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-        BufferedReader reader = new BufferedReader(streamReader);
+        FinancialReportData data = new FinancialReportDataBuilder().withInputStream(inputStream).withStreamReader(streamReader);        
 
-        for (String rawLine; (rawLine = reader.readLine()) != null;) {
-            List<String> line = CSVUtils.parseLine(rawLine);
-            Ride newRide = RidesParser.parseFromList(line);
-            if(newRide != null) {
-                result.add(newRide);
-            }
-        }
-
-        WebReport webReport = new WebReport();
+        Report webReport = ReportFactory.createReport("web", data);
         String htmlReport = webReport.createContent(result);
+        Report.createFile("financial-report.html", htmlReport);
         // System.out.println(htmlReport);
-        webReport.createFile(htmlReport);
+        
+        Report printReport = ReportFactory.createReport("print", data);
+        String textReport = printReport.createContent(result);
+        Report.createFile("financial-report.txt", textReport);
+        System.out.println(textReport)
     }
 }
